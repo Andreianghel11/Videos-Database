@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * The class writes the output in files
@@ -54,4 +55,6 @@ public final class Writer {
             e.printStackTrace();
         }
     }
+
+
 }

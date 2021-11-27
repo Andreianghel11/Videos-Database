@@ -1,12 +1,14 @@
 package main;
 
-import checker.Checkstyle;
 import checker.Checker;
+import checker.Checkstyle;
 import common.Constants;
+import fileio.ActorInputData;
 import fileio.Input;
 import fileio.InputLoader;
 import fileio.Writer;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,7 +73,16 @@ public final class Main {
         JSONArray arrayResult = new JSONArray();
 
         //TODO add here the entry point to your implementation
+        //trebuie adaugate elementele din input in baza de date
 
+
+
+        //asa adaug in lista un obiect de tip json
+        //obiectele json vor contine doar id(???), field(???) si mesaj
+        //metoda write file returneaza un JSONObject
+        arrayResult.add(fileWriter.writeFile(1, null, "test123"));
+
+        //scrierea efectiva a listei
         fileWriter.closeJSON(arrayResult);
     }
 }
