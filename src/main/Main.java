@@ -3,10 +3,10 @@ package main;
 import checker.Checker;
 import checker.Checkstyle;
 import common.Constants;
-import fileio.ActorInputData;
-import fileio.Input;
-import fileio.InputLoader;
-import fileio.Writer;
+import database.Action;
+import database.Database;
+import database.Output;
+import fileio.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -74,13 +74,21 @@ public final class Main {
 
         //TODO add here the entry point to your implementation
         //trebuie adaugate elementele din input in baza de date
+        Database database = new Database(input);
 
+        //obiect folosit pentru scrierea output-ului
+        Output output = new Output(fileWriter, arrayResult);
+
+        //parcurgerea comenzilor
+
+        for (Action currentAction : database.getActionsList()) {
+            database.actionSelector(currentAction, output);
+        }
 
 
         //asa adaug in lista un obiect de tip json
-        //obiectele json vor contine doar id(???), field(???) si mesaj
+        //obiectele json vor contine doar id(al comenzii), field(???) si mesaj
         //metoda write file returneaza un JSONObject
-        arrayResult.add(fileWriter.writeFile(1, null, "test123"));
 
         //scrierea efectiva a listei
         fileWriter.closeJSON(arrayResult);
