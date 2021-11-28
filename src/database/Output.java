@@ -15,18 +15,35 @@ public class Output {
         this.arrayResult = arrayResult;
     }
 
-    public void addFavoriteMessage(int id, String message) throws IOException {
-        String finalMessage = "success -> " + message + " was added as favourite";
-        arrayResult.add(fileWriter.writeFile(id, null, finalMessage));
+    public void displayFavoriteMessage(int id, String title) throws IOException {
+        String message = "success -> " + title + " was added as favourite";
+        arrayResult.add(fileWriter.writeFile(id, null, message));
     }
 
-    public void invalidFavoriteMessage(int id, String message) throws IOException {
-        String finalMessage = "error -> " + message + " is not seen";
-        arrayResult.add(fileWriter.writeFile(id, null, finalMessage));
+    public void displayDuplicateFavoriteMessage(int id, String title) throws IOException {
+        String message = "error -> " + title + " is already in favourite list";
+        arrayResult.add(fileWriter.writeFile(id, null, message));
     }
 
-    public void duplicateFavoriteMessage(int id, String message) throws IOException {
-        String finalMessage = "error -> " + message + " is already in favourite list";
-        arrayResult.add(fileWriter.writeFile(id, null, finalMessage));
+    public void displayViewMessage(int id, String title, int views) throws IOException {
+        String message = "success -> " + title + " was viewed with total views of " + Integer.toString(views);
+        arrayResult.add(fileWriter.writeFile(id, null, message));
     }
+
+    public void displayRatingMessage(int id, String title, double rating, String user) throws IOException {
+        String message = "success -> " + title + " was rated with " + Double.toString(rating) + " by " + user;
+        arrayResult.add(fileWriter.writeFile(id, null, message));
+    }
+
+    public void displayErrorAlreadyRated(int id, String title) throws IOException {
+        String message = "error -> " + title + " has been already rated";
+        arrayResult.add(fileWriter.writeFile(id, null, message));
+    }
+
+    public void displayErrorNoTitle(int id, String title) throws IOException {
+        String message = "error -> " + title + " is not seen";
+        arrayResult.add(fileWriter.writeFile(id, null, message));
+    }
+
+
 }

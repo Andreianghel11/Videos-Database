@@ -3,6 +3,7 @@ package database;
 import fileio.UserInputData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /* Clasa User facuta de mine. */
@@ -16,12 +17,11 @@ public class User {
 
     private ArrayList<String> favoriteMovies;
 
-    public User(String username, String subscriptionType, Map<String, Integer> history, ArrayList<String> favoriteMovies) {
-        this.username = username;
-        this.subscriptionType = subscriptionType;
-        this.history = history;
-        this.favoriteMovies = favoriteMovies;
-    }
+    /* Pt rating film. */
+    private HashMap<String, Double> movieRatings;
+
+    /* Pt rating serial. -> nume serial, numar sezon, rating*/
+    private Map<String, Map<Integer, Double>> serialRatings;
 
     /* Constructor special. */
     public User(UserInputData user) {
@@ -29,6 +29,8 @@ public class User {
         this.subscriptionType = user.getSubscriptionType();
         this.history = user.getHistory();
         this.favoriteMovies = user.getFavoriteMovies();
+        this.movieRatings = new HashMap<>();
+        this.serialRatings = new HashMap<>();
     }
 
     public String getUsername() {
@@ -61,6 +63,22 @@ public class User {
 
     public void setFavoriteMovies(ArrayList<String> favoriteMovies) {
         this.favoriteMovies = favoriteMovies;
+    }
+
+    public Map<String, Double> getMovieRatings() {
+        return movieRatings;
+    }
+
+    public void setMovieRatings(HashMap<String, Double> movieRatings) {
+        this.movieRatings = movieRatings;
+    }
+
+    public Map<String, Map<Integer, Double>> getSerialRatings() {
+        return serialRatings;
+    }
+
+    public void setSerialRatings(Map<String, Map<Integer, Double>> serialRatings) {
+        this.serialRatings = serialRatings;
     }
 
     @Override
