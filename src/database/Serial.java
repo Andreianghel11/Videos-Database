@@ -38,6 +38,36 @@ public class Serial extends Show{
         this.seasons = seasons;
     }
 
+    /*Calculeaza rating-ul unui serial, tinand cont de toate notele acordate de catre useri sezoanelor.
+     Daca cel putin un sezon are rating, restul sezoanelor au nota 0.
+     */
+    public double calculateSerialGrade() {
+        int gradeFound = 0;
+        double rating = 0.0;
+        for (Season currentSeason : seasons) {
+            rating += calculateSeasonGrade(currentSeason);
+            gradeFound = 1;
+        }
+
+        if (gradeFound == 0) {
+            return 0.0;
+        } else {
+            return rating / seasons.size();
+        }
+    }
+
+    /* Calculeaza rating-ul unui sezon, tinand cont de toate notele acordate de catre useri.*/
+    public double calculateSeasonGrade(Season season) {
+        double rating = 0.0;
+        if (season.getRatings().isEmpty()) {
+            return 0.0;
+        }
+        for (Double currentRating : season.getRatings()) {
+            rating += currentRating;
+        }
+        return rating / season.getRatings().size();
+    }
+
     @Override
     public String toString() {
         return "SerialInputData{" + " title= "

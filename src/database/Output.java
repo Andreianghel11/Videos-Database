@@ -4,6 +4,8 @@ import fileio.Writer;
 import org.json.simple.JSONArray;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Output {
@@ -45,5 +47,10 @@ public class Output {
         arrayResult.add(fileWriter.writeFile(id, null, message));
     }
 
+    /* TO BE TESTED*/
+    public void displayQueryResult(int id, List<String> list) throws IOException {
+        String message ="Query result: " + list;
+        arrayResult.add(fileWriter.writeFile(id, null, message));
+    }
 
 }

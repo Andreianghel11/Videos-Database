@@ -3,11 +3,13 @@ package database;
 import actor.ActorsAwards;
 import fileio.ActorInputData;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.Map;
 
 /*Clasa Actor facuta de mine.*/
 public class Actor {
+
     private String name;
 
     private String careerDescription;
@@ -62,6 +64,25 @@ public class Actor {
 
     public void setAwards(Map<ActorsAwards, Integer> awards) {
         this.awards = awards;
+    }
+
+    public double calculateActorRating(Database database) {
+        double rating = 0.0;
+        int numberOfRatings = 0;
+        for (String name : filmography) {
+            Movie currentMovie = database.getMoviesMap().get(name);
+            Serial currentSerial = database.getSerialsMap().get(name);
+            if (currentMovie != null) {
+                if (currentMovie.calculateMovieGrade() != 0)
+                    numberOfRatings++;
+                rating += currentMovie.calculateMovieGrade();
+            } else if (currentSerial != null){
+                if (currentSerial.calculateSerialGrade() != 0)
+                    numberOfRatings++;
+                rating += currentSerial.calculateSerialGrade();
+            }
+        }
+        return rating / numberOfRatings;
     }
 
     @Override

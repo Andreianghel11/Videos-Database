@@ -1,15 +1,11 @@
 package actions;
 
-import database.Action;
-import database.Database;
-import database.Output;
-import database.User;
+import database.*;
 import entertainment.Season;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ActionExecutor {
     public static void executeCommand(Database database, Action action, Output output) throws IOException {
@@ -54,6 +50,9 @@ public class ActionExecutor {
                 if (action.getSeasonNumber() == 0) {
                     user.getMovieRatings().put(action.getTitle(), action.getGrade());
                     output.displayRatingMessage(action.getActionId(), action.getTitle(), action.getGrade(), user.getUsername());
+
+                    Movie currentMovie = database.getMoviesMap().get(action.getTitle());
+                    currentMovie.getRatings().add(action.getGrade());
                     /* Cazul pt seriale. */
                 } else {
                     if (!user.getSerialRatings().containsKey(action.getTitle())) {
@@ -64,9 +63,27 @@ public class ActionExecutor {
                         user.getSerialRatings().get(action.getTitle()).put(action.getSeasonNumber(), action.getGrade());
                     }
                     output.displayRatingMessage(action.getActionId(), action.getTitle(), action.getGrade(), user.getUsername());
+
+                    /* Adaug rating-ul nou la serialul respectiv. */
+                    Serial currentSerial = database.getSerialsMap().get(action.getTitle());
+                    Season currentSeason = currentSerial.getSeasons().get(action.getSeasonNumber() - 1);
+                    currentSeason.getRatings().add(action.getGrade());
+                    }
                 }
             }
 
         }
+
+        public static void executeQuerry(Database database, Action action, Output output) throws IOException {
+            if (action.getObjectType().equals("actors")) {
+                if (action.getCriteria().equals("average")) {
+                     List<String> result = database.getActorsMap().values().stream().sorted(Comparator.comparing(Actor::getName)).
+                             sorted(Comparator.comparingDouble(a -> a.calculateActorRating(database))).limit(action.getNumber()).
+                             map(Actor::getName).toList();
+
+
+                     output.displayQueryResult(action.getActionId(), result);
+                }
+            }
+        }
     }
-}

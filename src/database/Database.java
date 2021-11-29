@@ -102,7 +102,7 @@ public class Database {
         if (action.getActionType().equals("command")) {
             ActionExecutor.executeCommand(this, action, output);
         } else if (action.getActionType().equals("query")) {
-
+            ActionExecutor.executeQuerry(this, action, output);
         } else if (action.getActionType().equals("")) {
 
         }

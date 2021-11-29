@@ -3,19 +3,24 @@ package database;
 import fileio.MovieInputData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /* Clasa Movie implementata de mine. */
 public class Movie extends Show{
     private int duration;
 
+    private ArrayList<Double> ratings;
+
     public Movie(String title, int year, ArrayList<String> cast, ArrayList<String> genres, int duration) {
         super(title, year, cast, genres);
         this.duration = duration;
+        this.ratings = new ArrayList<>();
     }
 
     public Movie(MovieInputData movie) {
         super(movie.getTitle(), movie.getYear(), movie.getCast(), movie.getGenres());
         this.duration = movie.getDuration();
+        this.ratings = new ArrayList<>();
     }
 
     public int getDuration() {
@@ -24,6 +29,26 @@ public class Movie extends Show{
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public ArrayList<Double> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(ArrayList<Double> ratings) {
+        this.ratings = ratings;
+    }
+
+    public double calculateMovieGrade() {
+        if (ratings.isEmpty()) {
+            return 0;
+        } else {
+            double sum = 0.0;
+            for (Double currentRating : ratings) {
+                sum += currentRating;
+            }
+            return sum / ratings.size();
+        }
     }
 
     @Override
