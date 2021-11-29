@@ -46,22 +46,27 @@ public class ActionExecutor {
             User user = database.getUsersMap().get(action.getUsername());
             if (!user.getHistory().containsKey(action.getTitle())) {
                 output.displayErrorNoTitle(action.getActionId(), action.getTitle());
-                //de modificat si aici a doua!!!!!!!!!111
-            } else if (user.getMovieRatings().containsKey(action.getTitle()) || user.getSerialRatings().containsKey(action.getTitle())) {
+            } else if (user.getMovieRatings() != null && user.getMovieRatings().containsKey(action.getTitle()) ||
+                    user.getSerialRatings().get(action.getTitle()) != null && user.getSerialRatings().get(action.getTitle()).containsKey(action.getSeasonNumber())) {
                 output.displayErrorAlreadyRated(action.getActionId(), action.getTitle());
             } else {
                 /* Cazul pt filme. */
                 if (action.getSeasonNumber() == 0) {
                     user.getMovieRatings().put(action.getTitle(), action.getGrade());
                     output.displayRatingMessage(action.getActionId(), action.getTitle(), action.getGrade(), user.getUsername());
-                /* Cazul pt seriale. */
+                    /* Cazul pt seriale. */
                 } else {
-
-
-
-                    user.getSerialRatings().put(action.getSeasonNumber(), action.getGrade());
+                    if (!user.getSerialRatings().containsKey(action.getTitle())) {
+                        HashMap<Integer, Double> seasonsRatings = new HashMap<>();
+                        seasonsRatings.put(action.getSeasonNumber(), action.getGrade());
+                        user.getSerialRatings().put(action.getTitle(), seasonsRatings);
+                    } else {
+                        user.getSerialRatings().get(action.getTitle()).put(action.getSeasonNumber(), action.getGrade());
+                    }
+                    output.displayRatingMessage(action.getActionId(), action.getTitle(), action.getGrade(), user.getUsername());
                 }
-        }
+            }
 
+        }
     }
 }
