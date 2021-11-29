@@ -5,6 +5,7 @@ import fileio.ActorInputData;
 
 import javax.xml.crypto.Data;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 
 /*Clasa Actor facuta de mine.*/
@@ -83,6 +84,18 @@ public class Actor {
             }
         }
         return rating / numberOfRatings;
+    }
+
+    public int calculateNumberOfAwards() {
+        int sum = 0;
+        for (Integer number : awards.values()) {
+            sum += number;
+        }
+        return sum;
+    }
+
+    public boolean descriptionContainsWord(String word) {
+        return this.careerDescription.toLowerCase().contains(word.toLowerCase());
     }
 
     @Override

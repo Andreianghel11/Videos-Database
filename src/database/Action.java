@@ -45,6 +45,7 @@ public class Action {
         this.number = action.getNumber();
         this.grade = action.getGrade();
         this.seasonNumber = action.getSeasonNumber();
+        this.filters = action.getFilters();
     }
 
     public int getActionId() {
@@ -149,5 +150,24 @@ public class Action {
 
     public void setFilters(List<List<String>> filters) {
         this.filters = filters;
+    }
+
+    @Override
+    public String toString() {
+        return "Action{" +
+                "actionId=" + actionId +
+                ", actionType='" + actionType + '\'' +
+                ", type='" + type + '\'' +
+                ", username='" + username + '\'' +
+                ", objectType='" + objectType + '\'' +
+                ", sortType='" + sortType + '\'' +
+                ", criteria='" + criteria + '\'' +
+                ", title='" + title + '\'' +
+                ", genre='" + genre + '\'' +
+                ", number=" + number +
+                ", grade=" + grade +
+                ", seasonNumber=" + seasonNumber +
+                ", filters=" + filters +
+                '}';
     }
 }

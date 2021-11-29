@@ -2,6 +2,7 @@ package actions;
 
 import database.*;
 import entertainment.Season;
+import utils.Utils;
 
 import java.io.IOException;
 import java.util.*;
@@ -77,12 +78,89 @@ public class ActionExecutor {
         public static void executeQuerry(Database database, Action action, Output output) throws IOException {
             if (action.getObjectType().equals("actors")) {
                 if (action.getCriteria().equals("average")) {
-                     List<String> result = database.getActorsMap().values().stream().sorted(Comparator.comparing(Actor::getName)).
-                             sorted(Comparator.comparingDouble(a -> a.calculateActorRating(database))).limit(action.getNumber()).
-                             map(Actor::getName).toList();
+                    if (action.getSortType().equals("asc")) {
+                        List<String> result = database.getActorsMap().values().stream().sorted(Comparator.comparing(Actor::getName)).
+                                sorted(Comparator.comparingDouble(a -> a.calculateActorRating(database))).limit(action.getNumber()).
+                                map(Actor::getName).toList();
+                        output.displayQueryResult(action.getActionId(), result);
+                    } else if (action.getSortType().equals("desc")) {
+                        List<String> result = database.getActorsMap().values().stream().sorted(Comparator.comparing(Actor::getName)).
+                                sorted(Comparator.comparingDouble(a -> a.calculateActorRating(database))).map(Actor::getName).
+                                toList();
+                        ArrayList<String> result2 = new ArrayList<>(result);
+                        Collections.reverse(result2);
+                        List<String> result3 = new ArrayList<>();
+                        if (result2 != null) {
+                            if (action.getNumber() <= result2.size())
+                                result3 = result2.subList(0, action.getNumber());
+                        }
 
+                        output.displayQueryResult(action.getActionId(), result3);
+                     }
 
-                     output.displayQueryResult(action.getActionId(), result);
+                } else if (action.getCriteria().equals("awards")) {
+                    List<Actor> actorList = new ArrayList<>();
+                    List<String> awardList = action.getFilters().get(3);
+                    for (Actor currentActor : database.getActorsMap().values()) {
+                        int actorHasAllAwards = 1;
+                        for (String currentAward : awardList) {
+                            if (!currentActor.getAwards().containsKey(Utils.stringToAwards(currentAward))) {
+                                actorHasAllAwards = 0;
+                                break;
+                            }
+                        }
+                        if (actorHasAllAwards == 1) {
+                            actorList.add(currentActor);
+                        }
+                    }
+                    if (action.getSortType().equals("asc")) {
+                        List<String> result = actorList.stream().sorted(Comparator.comparing(Actor::getName)).
+                                sorted(Comparator.comparingInt(Actor::calculateNumberOfAwards)).map(Actor::getName).
+                                limit(action.getNumber()).toList();
+                        output.displayQueryResult(action.getActionId(), result);
+                    } else if (action.getSortType().equals("desc")) {
+                        List<String> result = actorList.stream().sorted(Comparator.comparing(Actor::getName)).
+                                sorted(Comparator.comparingInt(Actor::calculateNumberOfAwards)).map(Actor::getName).toList();
+                        ArrayList<String> result2 = new ArrayList<>(result);
+                        Collections.reverse(result2);
+                        List<String> result3 = new ArrayList<>();
+                        if (result2 != null) {
+                            if (action.getNumber() <= result2.size())
+                                result3 = result2.subList(0, action.getNumber());
+                        }
+                        output.displayQueryResult(action.getActionId(), result3);
+                    }
+                } else if (action.getCriteria().equals("filter_description")) {
+                    List<Actor> actorList = new ArrayList<>();
+                    List<String> wordList = action.getFilters().get(2);
+                    for (Actor currentActor : database.getActorsMap().values()) {
+                        int actorHasAllWords = 1;
+                        for (String currentWord : wordList) {
+                            if (!currentActor.descriptionContainsWord(currentWord)) {
+                                actorHasAllWords = 0;
+                                break;
+                            }
+                        }
+                        if (actorHasAllWords == 1) {
+                            actorList.add(currentActor);
+                        }
+                    }
+                    if (action.getSortType().equals("asc")) {
+                        List<String> result = actorList.stream().sorted(Comparator.comparing(Actor::getName)).
+                                map(Actor::getName).limit(action.getNumber()).toList();
+                        output.displayQueryResult(action.getActionId(), result);
+                    } else if (action.getSortType().equals("desc")) {
+                        List<String> result = actorList.stream().sorted(Comparator.comparing(Actor::getName)).
+                                map(Actor::getName).toList();
+                        ArrayList<String> result2 = new ArrayList<>(result);
+                        Collections.reverse(result2);
+                        List<String> result3 = new ArrayList<>();
+                        if (result2 != null) {
+                            if (action.getNumber() <= result2.size())
+                                result3 = result2.subList(0, action.getNumber());
+                        }
+                        output.displayQueryResult(action.getActionId(), result3);
+                    }
                 }
             }
         }
