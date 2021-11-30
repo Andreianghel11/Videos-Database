@@ -3,9 +3,7 @@ package database;
 import actor.ActorsAwards;
 import fileio.ActorInputData;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Map;
 
 /*Clasa Actor facuta de mine.*/
@@ -74,13 +72,13 @@ public class Actor {
             Movie currentMovie = database.getMoviesMap().get(name);
             Serial currentSerial = database.getSerialsMap().get(name);
             if (currentMovie != null) {
-                if (currentMovie.calculateMovieGrade() != 0)
+                if (currentMovie.calculateShowGrade() != 0)
                     numberOfRatings++;
-                rating += currentMovie.calculateMovieGrade();
+                rating += currentMovie.calculateShowGrade();
             } else if (currentSerial != null){
-                if (currentSerial.calculateSerialGrade() != 0)
+                if (currentSerial.calculateShowGrade() != 0)
                     numberOfRatings++;
-                rating += currentSerial.calculateSerialGrade();
+                rating += currentSerial.calculateShowGrade();
             }
         }
         return rating / numberOfRatings;

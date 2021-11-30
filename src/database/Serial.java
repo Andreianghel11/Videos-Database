@@ -4,6 +4,7 @@ import entertainment.Season;
 import fileio.SerialInputData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /* Clasa Serial implementata de mine. */
 public class Serial extends Show{
@@ -41,7 +42,7 @@ public class Serial extends Show{
     /*Calculeaza rating-ul unui serial, tinand cont de toate notele acordate de catre useri sezoanelor.
      Daca cel putin un sezon are rating, restul sezoanelor au nota 0.
      */
-    public double calculateSerialGrade() {
+    public double calculateShowGrade() {
         int gradeFound = 0;
         double rating = 0.0;
         for (Season currentSeason : seasons) {
@@ -66,6 +67,44 @@ public class Serial extends Show{
             rating += currentRating;
         }
         return rating / season.getRatings().size();
+    }
+
+    public boolean isFromYear(List<String> yearList) {
+        if (yearList.isEmpty())
+            return true;
+        if (Integer.toString(this.getYear()).equals(yearList.get(0)))
+            return true;
+        return false;
+    }
+
+    public boolean hasGenres(List<String> genreList) {
+        if (genreList.isEmpty())
+            return true;
+        for (String currentGenre : genreList) {
+            if (!this.getGenres().contains(currentGenre))
+                return false;
+        }
+        return true;
+    }
+
+    public int numberOfFavorites(Database database) {
+        int numberOfFavorites = 0;
+        for (User currentUser : database.getUsersMap().values()) {
+            for (String currentSerial : currentUser.getFavoriteMovies()) {
+                if (this.getTitle().equals(currentSerial) && database.getSerialsMap().containsKey(currentSerial))
+                    /* Verific si daca videoclipul din lista de favorite este serial. Posibil sa nu fie nevoie*/
+                    numberOfFavorites++;
+            }
+        }
+        return numberOfFavorites;
+    }
+
+    public int calculateDuration() {
+        int duration = 0;
+        for (Season currentSeason : seasons) {
+            duration += currentSeason.getDuration();
+        }
+        return duration;
     }
 
     @Override

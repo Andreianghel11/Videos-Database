@@ -2,6 +2,7 @@ package database;
 
 import fileio.MovieInputData;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class Movie extends Show{
         this.ratings = ratings;
     }
 
-    public double calculateMovieGrade() {
+    public double calculateShowGrade() {
         if (ratings.isEmpty()) {
             return 0;
         } else {
@@ -49,6 +50,36 @@ public class Movie extends Show{
             }
             return sum / ratings.size();
         }
+    }
+
+    public boolean isFromYear(List<String> yearList) {
+        if (yearList.isEmpty())
+            return true;
+        if (Integer.toString(this.getYear()).equals(yearList.get(0)))
+            return true;
+        return false;
+    }
+
+    public boolean hasGenres(List<String> genreList) {
+        if (genreList.isEmpty())
+            return true;
+        for (String currentGenre : genreList) {
+            if (!this.getGenres().contains(currentGenre))
+                return false;
+        }
+        return true;
+    }
+
+    public int numberOfFavorites(Database database) {
+        int numberOfFavorites = 0;
+        for (User currentUser : database.getUsersMap().values()) {
+            for (String currentMovie : currentUser.getFavoriteMovies()) {
+                if (this.getTitle().equals(currentMovie) && database.getMoviesMap().containsKey(currentMovie))
+                    /* Verific si daca videoclipul din lista de favorite este film. Posibil sa nu fie nevoie*/
+                    numberOfFavorites++;
+            }
+        }
+        return numberOfFavorites;
     }
 
     @Override

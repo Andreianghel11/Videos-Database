@@ -1,6 +1,7 @@
 package database;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Show {
     private String title;
@@ -49,4 +50,12 @@ public abstract class Show {
     public void setGenres(ArrayList<String> genres) {
         this.genres = genres;
     }
+
+    public abstract double calculateShowGrade();
+
+    public abstract boolean isFromYear(List<String> yearList);
+
+    public abstract boolean hasGenres(List<String> genreList);
+
+    public abstract int numberOfFavorites(Database database);
 }
