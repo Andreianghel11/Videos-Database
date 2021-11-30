@@ -1,7 +1,9 @@
 package database;
 
 import actions.ActionExecutor;
+import entertainment.Genre;
 import fileio.*;
+import utils.Utils;
 
 import javax.xml.crypto.Data;
 import java.io.IOException;
@@ -103,8 +105,20 @@ public class Database {
             ActionExecutor.executeCommand(this, action, output);
         } else if (action.getActionType().equals("query")) {
             ActionExecutor.executeQuerry(this, action, output);
-        } else if (action.getActionType().equals("")) {
+        } else if (action.getActionType().equals("recommendation")) {
+            ActionExecutor.executeRecommendation(this, action, output);
+        }
+    }
+
+    public int calculateGenreViews(Genre genre) {
+        int numberOfViews = 0;
+        for (Movie currentMovie : this.getMoviesMap().values()) {
+            for (String currentGenre : currentMovie.getGenres()) {
+                if (Utils.stringToGenre(currentGenre).equals(genre))
+                    numberOfViews += currentMovie.numberOfViews(this);
+            }
 
         }
+        return numberOfViews;
     }
 }

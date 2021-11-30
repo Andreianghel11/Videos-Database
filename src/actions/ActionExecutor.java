@@ -1,12 +1,12 @@
 package actions;
 
 import database.*;
+import entertainment.Genre;
 import entertainment.Season;
 import utils.Utils;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ActionExecutor {
     public static void executeCommand(Database database, Action action, Output output) throws IOException {
@@ -391,6 +391,175 @@ public class ActionExecutor {
                         result3 = result2;
                 }
                 output.displayQueryResult(action.getActionId(), result3);
+            }
+        }
+    }
+
+    public static void executeRecommendation(Database database, Action action, Output output) throws IOException {
+        if (action.getType().equals("standard")) {
+            for (String currentMovie : database.getMoviesMap().keySet()) {
+                if (!database.getUsersMap().get(action.getUsername()).getHistory().containsKey(currentMovie)) {
+                    output.displayStandardRecommendation(action.getActionId(), currentMovie);
+                    return;
+                }
+            }
+                for (String currentSerial : database.getSerialsMap().keySet()) {
+                    if (!database.getUsersMap().get(action.getUsername()).getHistory().containsKey(currentSerial)) {
+                        output.displayStandardRecommendation(action.getActionId(), currentSerial);
+                        return;
+                    }
+                }
+            output.displayErrorStandardRecommendation(action.getActionId());
+        } else if (action.getType().equals("best_unseen")) {
+            List<String> sortedMovieList = database.getMoviesMap().values().stream().
+                    sorted(Comparator.comparingDouble(Movie::calculateShowGrade)).map(Movie::getTitle).toList();
+            List<String> reversedSortedMovieList = new ArrayList<>(sortedMovieList);
+            Collections.reverse(reversedSortedMovieList);
+
+            List<String> sortedSerialList = database.getSerialsMap().values().stream().
+                    sorted(Comparator.comparingDouble(Serial::calculateShowGrade)).map(Serial::getTitle).toList();
+            List<String> reversedSortedSerialList = new ArrayList<>(sortedSerialList);
+            Collections.reverse(reversedSortedSerialList);
+
+            int foundMovie = 0;
+            String foundMovieTitle = null;
+            for (String currentMovie : reversedSortedMovieList) {
+                if (!database.getUsersMap().get(action.getUsername()).getHistory().containsKey(currentMovie)) {
+                    foundMovieTitle = currentMovie;
+                    foundMovie = 1;
+                    break;
+                }
+            }
+            int foundSerial = 0;
+            String foundSerialTitle = null;
+            for (String currentSerial : reversedSortedSerialList) {
+                if (!database.getUsersMap().get(action.getUsername()).getHistory().containsKey(currentSerial)) {
+                    foundSerialTitle = currentSerial;
+                    foundSerial = 1;
+                    break;
+                }
+            }
+            if (foundSerial == 0 && foundMovie == 1)
+                output.displayBestRatedUnseenRecommendation(action.getActionId(), foundMovieTitle);
+            else if (foundMovie == 0 && foundSerial == 1)
+                output.displayBestRatedUnseenRecommendation(action.getActionId(), foundSerialTitle);
+            else if (foundMovie == 1 && foundSerial == 1) {
+                if (database.getSerialsMap().get(foundSerialTitle).calculateShowGrade() >
+                    database.getMoviesMap().get(foundMovieTitle).calculateShowGrade())
+                    output.displayBestRatedUnseenRecommendation(action.getActionId(), foundSerialTitle);
+                else
+                    output.displayBestRatedUnseenRecommendation(action.getActionId(), foundMovieTitle);
+            } else
+                output.displayErrorBestRatedUnseenRecommendation(action.getActionId());
+
+        } else if (action.getType().equals("popular")) {
+            User user = database.getUsersMap().get(action.getUsername());
+            if (user.getSubscriptionType().equals("BASIC")) {
+                output.displayErrorPopularRecommendation(action.getActionId());
+            } else {
+                List<Genre> genreList = new ArrayList<>();
+                for (Genre currentGenre : Genre.values()) {
+                    genreList.add(currentGenre);
+                }
+                genreList = genreList.stream().sorted(Comparator.comparingInt(g -> database.calculateGenreViews(g))).
+                        toList();
+                List<Genre> reversedGenreList = new ArrayList<>(genreList);
+                Collections.reverse(reversedGenreList);
+
+                for (Genre currentGenre : reversedGenreList) {
+                    for (Movie currentMovie : database.getMoviesMap().values()) {
+                        if (!user.getHistory().containsKey(currentMovie.getTitle()) && currentMovie.hasGenre(currentGenre)) {
+                            output.displayPopularRecommendation(action.getActionId(), currentMovie.getTitle());
+                            return;
+                        }
+                    }
+                    for (Serial currentSerial : database.getSerialsMap().values()) {
+                        if (!user.getHistory().containsKey(currentSerial.getTitle()) && currentSerial.hasGenre(currentGenre)) {
+                            output.displayPopularRecommendation(action.getActionId(), currentSerial.getTitle());
+                            return;
+                        }
+                    }
+                }
+                output.displayErrorPopularRecommendation(action.getActionId());
+            }
+        } else if (action.getType().equals("favorite")) {
+            User user = database.getUsersMap().get(action.getUsername());
+            if (user.getSubscriptionType().equals("BASIC")) {
+                output.displayErrorPopularRecommendation(action.getActionId());
+            } else {
+                List<String> moviesList = database.getMoviesMap().values().stream().
+                        filter(m -> m.numberOfFavorites(database) > 0).
+                        sorted(Comparator.comparingInt(m -> m.numberOfFavorites(database))).
+                        map(Movie::getTitle).toList();
+                List<String> reversedMoviesList = new ArrayList<>(moviesList);
+                Collections.reverse(reversedMoviesList);
+
+                List<String> serialsList = database.getSerialsMap().values().stream().
+                        filter(s -> s.numberOfFavorites(database) > 0).
+                        sorted(Comparator.comparingInt(s -> s.numberOfFavorites(database))).
+                        map(Serial::getTitle).toList();
+                List<String> reversedSerialsList = new ArrayList<>(serialsList);
+                Collections.reverse(reversedSerialsList);
+
+                int foundMovie = 0;
+                String foundMovieTitle = null;
+                for (String currentMovie : reversedMoviesList) {
+                    if (!user.getHistory().containsKey(currentMovie)) {
+                        foundMovieTitle = currentMovie;
+                        foundMovie = 1;
+                        break;
+                    }
+                }
+                int foundSerial = 0;
+                String foundSerialTitle = null;
+                for (String currentSerial : reversedSerialsList) {
+                    if (!user.getHistory().containsKey(currentSerial)) {
+                        foundSerialTitle = currentSerial;
+                        foundSerial = 1;
+                        break;
+                    }
+                }
+                if (foundSerial == 0 && foundMovie == 1)
+                    output.displayFavoriteRecommendation(action.getActionId(), foundMovieTitle);
+                else if (foundMovie == 0 && foundSerial == 1)
+                    output.displayFavoriteRecommendation(action.getActionId(), foundSerialTitle);
+                else if (foundMovie == 1 && foundSerial == 1) {
+                    if (database.getSerialsMap().get(foundSerialTitle).numberOfFavorites(database) >
+                            database.getMoviesMap().get(foundMovieTitle).numberOfFavorites(database))
+                        output.displayFavoriteRecommendation(action.getActionId(), foundSerialTitle);
+                    else
+                        output.displayFavoriteRecommendation(action.getActionId(), foundMovieTitle);
+                } else
+                    output.displayErrorFavoriteRecommendation(action.getActionId());
+            }
+        } else if (action.getType().equals("search")) {
+            User user = database.getUsersMap().get(action.getUsername());
+            if (user.getSubscriptionType().equals("BASIC")) {
+                output.displayErrorPopularRecommendation(action.getActionId());
+            } else {
+                List<Show> showList = new ArrayList<>();
+                for (Movie currentMovie : database.getMoviesMap().values()) {
+                    if (currentMovie.hasGenre(Utils.stringToGenre(action.getGenre())))
+                        showList.add(currentMovie);
+                }
+                for (Serial currentSerial : database.getSerialsMap().values()) {
+                    if (currentSerial.hasGenre(Utils.stringToGenre(action.getGenre())))
+                        showList.add(currentSerial);
+                }
+
+                List<String> resultList = showList.stream().sorted(Comparator.comparing(Show::getTitle)).
+                        sorted(Comparator.comparingDouble(Show::calculateShowGrade)).map(Show::getTitle).
+                        toList();
+
+                List<String> displayList = new ArrayList<>();
+                for (String currentShow : resultList) {
+                    if (!user.getHistory().containsKey(currentShow))
+                        displayList.add(currentShow);
+                }
+                if (displayList.isEmpty())
+                    output.displayErrorSearchRecommendation(action.getActionId());
+                else
+                    output.displaySearchRecommendation(action.getActionId(), displayList);
             }
         }
     }

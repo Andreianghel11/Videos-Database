@@ -1,7 +1,9 @@
 package database;
 
+import entertainment.Genre;
 import entertainment.Season;
 import fileio.SerialInputData;
+import utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +87,14 @@ public class Serial extends Show{
                 return false;
         }
         return true;
+    }
+
+    public boolean hasGenre(Genre genre) {
+        for (String currentGenre : this.getGenres()) {
+            if (Utils.stringToGenre(currentGenre).equals(genre))
+                return true;
+        }
+        return false;
     }
 
     public int numberOfFavorites(Database database) {

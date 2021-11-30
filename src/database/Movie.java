@@ -1,6 +1,8 @@
 package database;
 
+import entertainment.Genre;
 import fileio.MovieInputData;
+import utils.Utils;
 
 import javax.xml.crypto.Data;
 import java.util.ArrayList;
@@ -68,6 +70,14 @@ public class Movie extends Show{
                 return false;
         }
         return true;
+    }
+
+    public boolean hasGenre(Genre genre) {
+        for (String currentGenre : this.getGenres()) {
+            if (Utils.stringToGenre(currentGenre).equals(genre))
+                return true;
+        }
+        return false;
     }
 
     public int numberOfFavorites(Database database) {
