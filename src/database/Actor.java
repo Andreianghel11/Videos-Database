@@ -4,6 +4,8 @@ import actor.ActorsAwards;
 import fileio.ActorInputData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /*Clasa Actor facuta de mine.*/
@@ -72,16 +74,19 @@ public class Actor {
             Movie currentMovie = database.getMoviesMap().get(name);
             Serial currentSerial = database.getSerialsMap().get(name);
             if (currentMovie != null) {
-                if (currentMovie.calculateShowGrade() != 0)
+                if (currentMovie.calculateShowGrade() > 0)
                     numberOfRatings++;
                 rating += currentMovie.calculateShowGrade();
             } else if (currentSerial != null){
-                if (currentSerial.calculateShowGrade() != 0)
+                if (currentSerial.calculateShowGrade() > 0)
                     numberOfRatings++;
                 rating += currentSerial.calculateShowGrade();
             }
         }
-        return rating / numberOfRatings;
+        if (numberOfRatings != 0)
+            return rating / numberOfRatings;
+        else
+            return 0;
     }
 
     public int calculateNumberOfAwards() {
@@ -93,7 +98,13 @@ public class Actor {
     }
 
     public boolean descriptionContainsWord(String word) {
-        return this.careerDescription.toLowerCase().contains(word.toLowerCase());
+        List<String> stringList = new ArrayList<>();
+        stringList = Arrays.stream(this.careerDescription.toLowerCase().split("\\W+")).toList();
+        for (String currentString : stringList) {
+            if (currentString.equals(word))
+                return true;
+        }
+        return false;
     }
 
     @Override

@@ -80,22 +80,24 @@ public class ActionExecutor {
             if (action.getCriteria().equals("average")) {
                 if (action.getSortType().equals("asc")) {
                     List<String> result = database.getActorsMap().values().stream().sorted(Comparator.comparing(Actor::getName)).
-                            sorted(Comparator.comparingDouble(a -> a.calculateActorRating(database))).limit(action.getNumber()).
+                            sorted(Comparator.comparingDouble(a -> a.calculateActorRating(database))).
+                            filter(a -> a.calculateActorRating(database) > 0).limit(action.getNumber()).
                             map(Actor::getName).toList();
                     output.displayQueryResult(action.getActionId(), result);
                 } else if (action.getSortType().equals("desc")) {
                     List<String> result = database.getActorsMap().values().stream().sorted(Comparator.comparing(Actor::getName)).
-                            sorted(Comparator.comparingDouble(a -> a.calculateActorRating(database))).map(Actor::getName).
-                            toList();
+                            sorted(Comparator.comparingDouble(a -> a.calculateActorRating(database))).
+                            filter(a -> a.calculateActorRating(database) > 0).map(Actor::getName).toList();
+
                     ArrayList<String> result2 = new ArrayList<>(result);
                     Collections.reverse(result2);
                     List<String> result3 = new ArrayList<>();
-                    if (result2 != null) {
-                        if (action.getNumber() <= result2.size())
-                            result3 = result2.subList(0, action.getNumber());
-                        else
-                            result3 = result2;
-                    }
+
+                    if (action.getNumber() <= result2.size())
+                        result3 = result2.subList(0, action.getNumber());
+                    else
+                        result3 = result2;
+
 
                     output.displayQueryResult(action.getActionId(), result3);
                 }
@@ -148,10 +150,10 @@ public class ActionExecutor {
                     ArrayList<String> result2 = new ArrayList<>(result);
                     Collections.reverse(result2);
                     List<String> result3 = new ArrayList<>();
-                    if (result2 != null) {
-                        if (action.getNumber() <= result2.size())
-                            result3 = result2.subList(0, action.getNumber());
-                    }
+                    if (action.getNumber() <= result2.size())
+                        result3 = result2.subList(0, action.getNumber());
+                    else
+                        result3 = result2;
                     output.displayQueryResult(action.getActionId(), result3);
                 }
             }

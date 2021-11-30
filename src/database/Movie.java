@@ -55,7 +55,7 @@ public class Movie extends Show{
     }
 
     public boolean isFromYear(List<String> yearList) {
-        if (yearList.isEmpty())
+        if (yearList.get(0) == null)
             return true;
         if (Integer.toString(this.getYear()).equals(yearList.get(0)))
             return true;
@@ -63,7 +63,7 @@ public class Movie extends Show{
     }
 
     public boolean hasGenres(List<String> genreList) {
-        if (genreList.isEmpty())
+        if (genreList.get(0) == null)
             return true;
         for (String currentGenre : genreList) {
             if (!this.getGenres().contains(currentGenre))
