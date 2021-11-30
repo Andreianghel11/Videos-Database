@@ -81,6 +81,10 @@ public class User {
         this.serialRatings = serialRatings;
     }
 
+    public int numberOfRatings() {
+        return movieRatings.size() + serialRatings.size();
+    }
+
     @Override
     public String toString() {
         return "UserInputData{" + "username='"

@@ -58,4 +58,6 @@ public abstract class Show {
     public abstract boolean hasGenres(List<String> genreList);
 
     public abstract int numberOfFavorites(Database database);
+
+    public abstract int numberOfViews(Database database);
 }

@@ -74,12 +74,25 @@ public class Movie extends Show{
         int numberOfFavorites = 0;
         for (User currentUser : database.getUsersMap().values()) {
             for (String currentMovie : currentUser.getFavoriteMovies()) {
-                if (this.getTitle().equals(currentMovie) && database.getMoviesMap().containsKey(currentMovie))
-                    /* Verific si daca videoclipul din lista de favorite este film. Posibil sa nu fie nevoie*/
+                if (this.getTitle().equals(currentMovie))
+                    /* Verific si daca videoclipul din lista de favorite este film. Posibil sa nu fie nevoie
+                    * database.getMoviesMap().containsKey(currentMovie)*/
                     numberOfFavorites++;
             }
         }
         return numberOfFavorites;
+    }
+
+    public int numberOfViews(Database database) {
+        int numberOfViews = 0;
+        for (User currentUser : database.getUsersMap().values()) {
+            for (String currentMovie : currentUser.getHistory().keySet()) {
+                if (this.getTitle().equals(currentMovie)) {
+                    numberOfViews += currentUser.getHistory().get(currentMovie);
+                }
+            }
+        }
+        return numberOfViews;
     }
 
     @Override

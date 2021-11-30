@@ -91,12 +91,25 @@ public class Serial extends Show{
         int numberOfFavorites = 0;
         for (User currentUser : database.getUsersMap().values()) {
             for (String currentSerial : currentUser.getFavoriteMovies()) {
-                if (this.getTitle().equals(currentSerial) && database.getSerialsMap().containsKey(currentSerial))
-                    /* Verific si daca videoclipul din lista de favorite este serial. Posibil sa nu fie nevoie*/
+                if (this.getTitle().equals(currentSerial))
+                    /* Verific si daca videoclipul din lista de favorite este serial. Posibil sa nu fie nevoie
+                    * database.getSerialsMap().containsKey(currentSerial)*/
                     numberOfFavorites++;
             }
         }
         return numberOfFavorites;
+    }
+
+    public int numberOfViews(Database database) {
+        int numberOfViews = 0;
+        for (User currentUser : database.getUsersMap().values()) {
+            for (String currentSerial : currentUser.getHistory().keySet()) {
+                if (this.getTitle().equals(currentSerial)) {
+                    numberOfViews += currentUser.getHistory().get(currentSerial);
+                }
+            }
+        }
+        return numberOfViews;
     }
 
     public int calculateDuration() {

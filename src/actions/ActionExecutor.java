@@ -313,6 +313,85 @@ public class ActionExecutor {
                 }
                 output.displayQueryResult(action.getActionId(), result3);
             }
+        } else if (action.getObjectType().equals("movies") && action.getCriteria().equals("most_viewed")) {
+            if (action.getSortType().equals("asc")) {
+                List<String> result = database.getMoviesMap().values().stream().
+                        filter(m -> m.isFromYear(action.getFilters().get(0))).filter(m -> m.hasGenres(action.getFilters().get(1))).
+                        filter(m -> m.numberOfViews(database) > 0).sorted(Comparator.comparing(Movie::getTitle)).
+                        sorted(Comparator.comparingInt(m -> m.numberOfViews(database))).
+                        limit(action.getNumber()).map(Movie::getTitle).toList();
+
+                output.displayQueryResult(action.getActionId(), result);
+            } else if (action.getSortType().equals("desc")) {
+                List<String> result = database.getMoviesMap().values().stream().
+                        filter(m -> m.isFromYear(action.getFilters().get(0))).filter(m -> m.hasGenres(action.getFilters().get(1))).
+                        filter(m -> m.numberOfViews(database) > 0).sorted(Comparator.comparing(Movie::getTitle)).
+                        sorted(Comparator.comparingInt(m -> m.numberOfViews(database))).
+                        map(Movie::getTitle).toList();
+
+                ArrayList<String> result2 = new ArrayList<>(result);
+                Collections.reverse(result2);
+                List<String> result3 = new ArrayList<>();
+                if (result2 != null) {
+                    if (action.getNumber() <= result2.size())
+                        result3 = result2.subList(0, action.getNumber());
+                    else
+                        result3 = result2;
+                }
+                output.displayQueryResult(action.getActionId(), result3);
+            }
+        } else if (action.getObjectType().equals("shows") && action.getCriteria().equals("most_viewed")) {
+            if (action.getSortType().equals("asc")) {
+                List<String> result = database.getSerialsMap().values().stream().
+                        filter(s -> s.isFromYear(action.getFilters().get(0))).filter(s -> s.hasGenres(action.getFilters().get(1))).
+                        filter(s -> s.numberOfViews(database) > 0).sorted(Comparator.comparing(Serial::getTitle)).
+                        sorted(Comparator.comparingInt(m -> m.numberOfViews(database))).
+                        limit(action.getNumber()).map(Serial::getTitle).toList();
+
+                output.displayQueryResult(action.getActionId(), result);
+            } else if (action.getSortType().equals("desc")) {
+                List<String> result = database.getSerialsMap().values().stream().
+                        filter(s -> s.isFromYear(action.getFilters().get(0))).filter(s -> s.hasGenres(action.getFilters().get(1))).
+                        filter(s -> s.numberOfViews(database) > 0).sorted(Comparator.comparing(Serial::getTitle)).
+                        sorted(Comparator.comparingInt(m -> m.numberOfViews(database))).
+                        map(Serial::getTitle).toList();
+
+                ArrayList<String> result2 = new ArrayList<>(result);
+                Collections.reverse(result2);
+                List<String> result3 = new ArrayList<>();
+                if (result2 != null) {
+                    if (action.getNumber() <= result2.size())
+                        result3 = result2.subList(0, action.getNumber());
+                    else
+                        result3 = result2;
+                }
+                output.displayQueryResult(action.getActionId(), result3);
+            }
+        } else if (action.getObjectType().equals("users") && action.getCriteria().equals("num_ratings")) {
+            if (action.getSortType().equals("asc")) {
+                List<String> result = database.getUsersMap().values().stream().
+                        filter(u -> u.numberOfRatings() > 0).sorted(Comparator.comparing(User::getUsername)).
+                        sorted(Comparator.comparingInt(User::numberOfRatings)).
+                        limit(action.getNumber()).map(User::getUsername).toList();
+
+                output.displayQueryResult(action.getActionId(), result);
+            } else if (action.getSortType().equals("desc")) {
+                List<String> result = database.getUsersMap().values().stream().
+                        filter(u -> u.numberOfRatings() > 0).sorted(Comparator.comparing(User::getUsername)).
+                        sorted(Comparator.comparingInt(User::numberOfRatings)).
+                        map(User::getUsername).toList();
+
+                ArrayList<String> result2 = new ArrayList<>(result);
+                Collections.reverse(result2);
+                List<String> result3 = new ArrayList<>();
+                if (result2 != null) {
+                    if (action.getNumber() <= result2.size())
+                        result3 = result2.subList(0, action.getNumber());
+                    else
+                        result3 = result2;
+                }
+                output.displayQueryResult(action.getActionId(), result3);
+            }
         }
     }
 }
