@@ -7,10 +7,7 @@ import utils.Utils;
 
 import javax.xml.crypto.Data;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Database {
     /* Nume, actor. */
@@ -41,15 +38,18 @@ public class Database {
             usersMap.put(newUser.getUsername(), newUser);
         }
 
-        moviesMap = new HashMap<>();
+        int showId = 1;
+        moviesMap = new LinkedHashMap<>();
         for (MovieInputData currentMovie : input.getMovies()) {
             Movie newMovie = new Movie(currentMovie);
+            newMovie.setId(showId++);
             moviesMap.put(newMovie.getTitle(), newMovie);
         }
 
-        serialsMap = new HashMap<>();
+        serialsMap = new LinkedHashMap<>();
         for (SerialInputData currentSerial : input.getSerials()) {
             Serial newSerial = new Serial(currentSerial);
+            newSerial.setId(showId++);
             serialsMap.put(newSerial.getTitle(), newSerial);
         }
 
@@ -115,10 +115,39 @@ public class Database {
         for (Movie currentMovie : this.getMoviesMap().values()) {
             for (String currentGenre : currentMovie.getGenres()) {
                 if (Utils.stringToGenre(currentGenre).equals(genre))
-                    numberOfViews += currentMovie.numberOfViews(this);
+                    numberOfViews += currentMovie.getNrOfViews();
             }
 
         }
         return numberOfViews;
+    }
+
+    public void calculateNumberOfFavoritesForEachShow() {
+        List<Show> showList = createShowList();
+        for (Show currentShow : showList) {
+            currentShow.numberOfFavorites(this);
+        }
+    }
+
+    public void calculateNumberOfViewsForEveryShow() {
+        List<Show> showList = createShowList();
+        for (Show currentShow : showList) {
+            currentShow.numberOfViews(this);
+        }
+    }
+
+    public void calculateRatingForEveryActor() {
+        for (Actor currentActor : this.getActorsMap().values()) {
+            currentActor.calculateActorRating(this);
+        }
+    }
+
+    public List<Show> createShowList() {
+        List<Show> showList = new ArrayList<>();
+
+        showList.addAll(moviesMap.values());
+        showList.addAll(serialsMap.values());
+
+        return showList;
     }
 }

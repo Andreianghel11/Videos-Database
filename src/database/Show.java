@@ -1,5 +1,7 @@
 package database;
 
+import entertainment.Genre;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +9,12 @@ public abstract class Show {
     private String title;
 
     private int year;
+
+    private int id;
+
+    private int nrOfFavorites;
+
+    private int nrOfViews;
 
     private ArrayList<String> cast;
 
@@ -35,6 +43,30 @@ public abstract class Show {
         this.year = year;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getNrOfFavorites() {
+        return nrOfFavorites;
+    }
+
+    public void setNrOfFavorites(int nrOfFavorites) {
+        this.nrOfFavorites = nrOfFavorites;
+    }
+
+    public int getNrOfViews() {
+        return nrOfViews;
+    }
+
+    public void setNrOfViews(int nrOfViews) {
+        this.nrOfViews = nrOfViews;
+    }
+
     public ArrayList<String> getCast() {
         return cast;
     }
@@ -57,7 +89,9 @@ public abstract class Show {
 
     public abstract boolean hasGenres(List<String> genreList);
 
-    public abstract int numberOfFavorites(Database database);
+    public abstract boolean hasGenre(Genre genre);
 
-    public abstract int numberOfViews(Database database);
+    public abstract void numberOfFavorites(Database database);
+
+    public abstract void numberOfViews(Database database);
 }

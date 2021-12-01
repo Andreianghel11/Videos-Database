@@ -80,7 +80,7 @@ public class Movie extends Show{
         return false;
     }
 
-    public int numberOfFavorites(Database database) {
+    public void numberOfFavorites(Database database) {
         int numberOfFavorites = 0;
         for (User currentUser : database.getUsersMap().values()) {
             for (String currentMovie : currentUser.getFavoriteMovies()) {
@@ -90,10 +90,10 @@ public class Movie extends Show{
                     numberOfFavorites++;
             }
         }
-        return numberOfFavorites;
+        this.setNrOfFavorites(numberOfFavorites);
     }
 
-    public int numberOfViews(Database database) {
+    public void numberOfViews(Database database) {
         int numberOfViews = 0;
         for (User currentUser : database.getUsersMap().values()) {
             for (String currentMovie : currentUser.getHistory().keySet()) {
@@ -102,7 +102,7 @@ public class Movie extends Show{
                 }
             }
         }
-        return numberOfViews;
+        this.setNrOfViews(numberOfViews);
     }
 
     @Override

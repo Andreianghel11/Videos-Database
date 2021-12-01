@@ -17,6 +17,8 @@ public class Actor {
 
     private ArrayList<String> filmography;
 
+    private double actorRating;
+
     /*Nume Award, numar.*/
     private Map<ActorsAwards, Integer> awards;
 
@@ -59,6 +61,14 @@ public class Actor {
         this.filmography = filmography;
     }
 
+    public double getActorRating() {
+        return actorRating;
+    }
+
+    public void setActorRating(double actorRating) {
+        this.actorRating = actorRating;
+    }
+
     public Map<ActorsAwards, Integer> getAwards() {
         return awards;
     }
@@ -67,7 +77,7 @@ public class Actor {
         this.awards = awards;
     }
 
-    public double calculateActorRating(Database database) {
+    public void calculateActorRating(Database database) {
         double rating = 0.0;
         int numberOfRatings = 0;
         for (String name : filmography) {
@@ -84,9 +94,9 @@ public class Actor {
             }
         }
         if (numberOfRatings != 0)
-            return rating / numberOfRatings;
+            this.setActorRating(rating / numberOfRatings);
         else
-            return 0;
+            this.setActorRating(0);
     }
 
     public int calculateNumberOfAwards() {
