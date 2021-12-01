@@ -1,5 +1,6 @@
 package main;
 
+import actions.ActionExecutor;
 import checker.Checker;
 import checker.Checkstyle;
 import common.Constants;
@@ -73,24 +74,14 @@ public final class Main {
         JSONArray arrayResult = new JSONArray();
 
         //TODO add here the entry point to your implementation
-        //trebuie adaugate elementele din input in baza de date
-        Database database = new Database(input);
 
-        //obiect folosit pentru scrierea output-ului
+        Database database = new Database(input);
         Output output = new Output(fileWriter, arrayResult);
 
-        //parcurgerea comenzilor
-
         for (Action currentAction : database.getActionsList()) {
-            database.actionSelector(currentAction, output);
+            ActionExecutor.actionSelector(database, currentAction, output);
         }
 
-
-        //asa adaug in lista un obiect de tip json
-        //obiectele json vor contine doar id(al comenzii), field(???) si mesaj
-        //metoda write file returneaza un JSONObject
-
-        //scrierea efectiva a listei
         fileWriter.closeJSON(arrayResult);
     }
 }

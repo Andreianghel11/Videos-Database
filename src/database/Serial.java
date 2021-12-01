@@ -14,12 +14,6 @@ public class Serial extends Show{
 
     private ArrayList<Season> seasons;
 
-    public Serial(String title, int year, ArrayList<String> cast, ArrayList<String> genres, int numberOfSeasons, ArrayList<Season> seasons) {
-        super(title, year, cast, genres);
-        this.numberOfSeasons = numberOfSeasons;
-        this.seasons = seasons;
-    }
-
     public Serial(SerialInputData serial) {
         super(serial.getTitle(), serial.getYear(), serial.getCast(), serial.getGenres());
         this.seasons = serial.getSeasons();
@@ -44,6 +38,7 @@ public class Serial extends Show{
     /*Calculeaza rating-ul unui serial, tinand cont de toate notele acordate de catre useri sezoanelor.
      Daca cel putin un sezon are rating, restul sezoanelor au nota 0.
      */
+    @Override
     public double calculateShowGrade() {
         int gradeFound = 0;
         double rating = 0.0;
@@ -69,57 +64,6 @@ public class Serial extends Show{
             rating += currentRating;
         }
         return rating / season.getRatings().size();
-    }
-
-    public boolean isFromYear(List<String> yearList) {
-        if (yearList.get(0) == null)
-            return true;
-        if (Integer.toString(this.getYear()).equals(yearList.get(0)))
-            return true;
-        return false;
-    }
-
-    public boolean hasGenres(List<String> genreList) {
-        if (genreList.get(0) == null)
-            return true;
-        for (String currentGenre : genreList) {
-            if (!this.getGenres().contains(currentGenre))
-                return false;
-        }
-        return true;
-    }
-
-    public boolean hasGenre(Genre genre) {
-        for (String currentGenre : this.getGenres()) {
-            if (Utils.stringToGenre(currentGenre).equals(genre))
-                return true;
-        }
-        return false;
-    }
-
-    public void numberOfFavorites(Database database) {
-        int numberOfFavorites = 0;
-        for (User currentUser : database.getUsersMap().values()) {
-            for (String currentSerial : currentUser.getFavoriteMovies()) {
-                if (this.getTitle().equals(currentSerial))
-                    /* Verific si daca videoclipul din lista de favorite este serial. Posibil sa nu fie nevoie
-                    * database.getSerialsMap().containsKey(currentSerial)*/
-                    numberOfFavorites++;
-            }
-        }
-        this.setNrOfFavorites(numberOfFavorites);
-    }
-
-    public void numberOfViews(Database database) {
-        int numberOfViews = 0;
-        for (User currentUser : database.getUsersMap().values()) {
-            for (String currentSerial : currentUser.getHistory().keySet()) {
-                if (this.getTitle().equals(currentSerial)) {
-                    numberOfViews += currentUser.getHistory().get(currentSerial);
-                }
-            }
-        }
-        this.setNrOfViews(numberOfViews);
     }
 
     public int calculateDuration() {

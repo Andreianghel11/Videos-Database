@@ -14,12 +14,6 @@ public class Movie extends Show{
 
     private ArrayList<Double> ratings;
 
-    public Movie(String title, int year, ArrayList<String> cast, ArrayList<String> genres, int duration) {
-        super(title, year, cast, genres);
-        this.duration = duration;
-        this.ratings = new ArrayList<>();
-    }
-
     public Movie(MovieInputData movie) {
         super(movie.getTitle(), movie.getYear(), movie.getCast(), movie.getGenres());
         this.duration = movie.getDuration();
@@ -42,6 +36,7 @@ public class Movie extends Show{
         this.ratings = ratings;
     }
 
+    @Override
     public double calculateShowGrade() {
         if (ratings.isEmpty()) {
             return 0;
@@ -52,57 +47,6 @@ public class Movie extends Show{
             }
             return sum / ratings.size();
         }
-    }
-
-    public boolean isFromYear(List<String> yearList) {
-        if (yearList.get(0) == null)
-            return true;
-        if (Integer.toString(this.getYear()).equals(yearList.get(0)))
-            return true;
-        return false;
-    }
-
-    public boolean hasGenres(List<String> genreList) {
-        if (genreList.get(0) == null)
-            return true;
-        for (String currentGenre : genreList) {
-            if (!this.getGenres().contains(currentGenre))
-                return false;
-        }
-        return true;
-    }
-
-    public boolean hasGenre(Genre genre) {
-        for (String currentGenre : this.getGenres()) {
-            if (Utils.stringToGenre(currentGenre).equals(genre))
-                return true;
-        }
-        return false;
-    }
-
-    public void numberOfFavorites(Database database) {
-        int numberOfFavorites = 0;
-        for (User currentUser : database.getUsersMap().values()) {
-            for (String currentMovie : currentUser.getFavoriteMovies()) {
-                if (this.getTitle().equals(currentMovie))
-                    /* Verific si daca videoclipul din lista de favorite este film. Posibil sa nu fie nevoie
-                    * database.getMoviesMap().containsKey(currentMovie)*/
-                    numberOfFavorites++;
-            }
-        }
-        this.setNrOfFavorites(numberOfFavorites);
-    }
-
-    public void numberOfViews(Database database) {
-        int numberOfViews = 0;
-        for (User currentUser : database.getUsersMap().values()) {
-            for (String currentMovie : currentUser.getHistory().keySet()) {
-                if (this.getTitle().equals(currentMovie)) {
-                    numberOfViews += currentUser.getHistory().get(currentMovie);
-                }
-            }
-        }
-        this.setNrOfViews(numberOfViews);
     }
 
     @Override

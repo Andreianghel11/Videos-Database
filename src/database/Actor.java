@@ -22,13 +22,6 @@ public class Actor {
     /*Nume Award, numar.*/
     private Map<ActorsAwards, Integer> awards;
 
-    public Actor(String name, String careerDescription, ArrayList<String> filmography, Map<ActorsAwards, Integer> awards) {
-        this.name = name;
-        this.careerDescription = careerDescription;
-        this.filmography = filmography;
-        this.awards = awards;
-    }
-
     /* Constructor special. */
     public Actor(ActorInputData actor) {
         this.name = actor.getName();

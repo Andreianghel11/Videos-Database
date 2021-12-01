@@ -1,6 +1,7 @@
 package database;
 
 import entertainment.Genre;
+import utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,13 +86,54 @@ public abstract class Show {
 
     public abstract double calculateShowGrade();
 
-    public abstract boolean isFromYear(List<String> yearList);
+    public boolean isFromYear(List<String> yearList) {
+        if (yearList.get(0) == null)
+            return true;
+        if (Integer.toString(this.getYear()).equals(yearList.get(0)))
+            return true;
+        return false;
+    }
 
-    public abstract boolean hasGenres(List<String> genreList);
+    public boolean hasAllGenres(List<String> genreList) {
+        if (genreList.get(0) == null)
+            return true;
+        for (String currentGenre : genreList) {
+            if (!this.getGenres().contains(currentGenre))
+                return false;
+        }
+        return true;
+    }
 
-    public abstract boolean hasGenre(Genre genre);
+    public boolean hasGenre(Genre genre) {
+        for (String currentGenre : this.getGenres()) {
+            if (Utils.stringToGenre(currentGenre).equals(genre))
+                return true;
+        }
+        return false;
+    }
 
-    public abstract void numberOfFavorites(Database database);
+    public void numberOfFavorites(Database database) {
+        int numberOfFavorites = 0;
+        for (User currentUser : database.getUsersMap().values()) {
+            for (String currentShow : currentUser.getFavoriteMovies()) {
+                if (this.getTitle().equals(currentShow))
+                    /* Verific si daca videoclipul din lista de favorite este serial. Posibil sa nu fie nevoie
+                     * database.getSerialsMap().containsKey(currentSerial)*/
+                    numberOfFavorites++;
+            }
+        }
+        this.setNrOfFavorites(numberOfFavorites);
+    }
 
-    public abstract void numberOfViews(Database database);
+    public void numberOfViews(Database database) {
+        int numberOfViews = 0;
+        for (User currentUser : database.getUsersMap().values()) {
+            for (String currentShow : currentUser.getHistory().keySet()) {
+                if (this.getTitle().equals(currentShow)) {
+                    numberOfViews += currentUser.getHistory().get(currentShow);
+                }
+            }
+        }
+        this.setNrOfViews(numberOfViews);
+    }
 }
