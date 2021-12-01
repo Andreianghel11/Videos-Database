@@ -8,8 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-/*Clasa Actor facuta de mine.*/
-public class Actor {
+/**
+ * Clasa definește obiectele de tip actor.
+ */
+public final class Actor {
 
     private String name;
 
@@ -19,11 +21,12 @@ public class Actor {
 
     private double actorRating;
 
-    /*Nume Award, numar.*/
     private Map<ActorsAwards, Integer> awards;
 
-    /* Constructor special. */
-    public Actor(ActorInputData actor) {
+    /**
+     * Constructor specializat.
+     */
+    public Actor(final ActorInputData actor) {
         this.name = actor.getName();
         this.careerDescription = actor.getCareerDescription();
         this.filmography = actor.getFilmography();
@@ -34,7 +37,7 @@ public class Actor {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -42,7 +45,7 @@ public class Actor {
         return careerDescription;
     }
 
-    public void setCareerDescription(String careerDescription) {
+    public void setCareerDescription(final String careerDescription) {
         this.careerDescription = careerDescription;
     }
 
@@ -50,7 +53,7 @@ public class Actor {
         return filmography;
     }
 
-    public void setFilmography(ArrayList<String> filmography) {
+    public void setFilmography(final ArrayList<String> filmography) {
         this.filmography = filmography;
     }
 
@@ -58,7 +61,7 @@ public class Actor {
         return actorRating;
     }
 
-    public void setActorRating(double actorRating) {
+    public void setActorRating(final double actorRating) {
         this.actorRating = actorRating;
     }
 
@@ -66,32 +69,43 @@ public class Actor {
         return awards;
     }
 
-    public void setAwards(Map<ActorsAwards, Integer> awards) {
+    public void setAwards(final Map<ActorsAwards, Integer> awards) {
         this.awards = awards;
     }
 
-    public void calculateActorRating(Database database) {
+    /**
+     * Calculează rating-ul actorului curent.
+     * Primește ca parametru baza de date pentru a
+     * putea accesa show-urile și rating-urile lor.
+     */
+    public void calculateActorRating(final Database database) {
         double rating = 0.0;
         int numberOfRatings = 0;
-        for (String name : filmography) {
-            Movie currentMovie = database.getMoviesMap().get(name);
-            Serial currentSerial = database.getSerialsMap().get(name);
+        for (String currentName : filmography) {
+            Movie currentMovie = database.getMoviesMap().get(currentName);
+            Serial currentSerial = database.getSerialsMap().get(currentName);
             if (currentMovie != null) {
-                if (currentMovie.calculateShowGrade() > 0)
+                if (currentMovie.calculateShowGrade() > 0) {
                     numberOfRatings++;
+                }
                 rating += currentMovie.calculateShowGrade();
-            } else if (currentSerial != null){
-                if (currentSerial.calculateShowGrade() > 0)
+            } else if (currentSerial != null) {
+                if (currentSerial.calculateShowGrade() > 0) {
                     numberOfRatings++;
+                }
                 rating += currentSerial.calculateShowGrade();
             }
         }
-        if (numberOfRatings != 0)
+        if (numberOfRatings != 0) {
             this.setActorRating(rating / numberOfRatings);
-        else
+        } else {
             this.setActorRating(0);
+        }
     }
 
+    /**
+     * Calculează numărul de premii deținute de un actor.
+     */
     public int calculateNumberOfAwards() {
         int sum = 0;
         for (Integer number : awards.values()) {
@@ -100,12 +114,17 @@ public class Actor {
         return sum;
     }
 
-    public boolean descriptionContainsWord(String word) {
-        List<String> stringList = new ArrayList<>();
-        stringList = Arrays.stream(this.careerDescription.toLowerCase().split("\\W+")).toList();
+    /**
+     * Caută în descrierea actorului String-ul primit ca parametru.
+     */
+    public boolean descriptionContainsWord(final String word) {
+        List<String> stringList;
+        stringList = Arrays
+                .stream(this.careerDescription.toLowerCase().split("\\W+")).toList();
         for (String currentString : stringList) {
-            if (currentString.equals(word))
+            if (currentString.equals(word)) {
                 return true;
+            }
         }
         return false;
     }

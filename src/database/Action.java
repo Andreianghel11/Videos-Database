@@ -2,10 +2,12 @@ package database;
 
 import fileio.ActionInputData;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Action {
+/**
+ * Clasa definește obiectele de tip acțiune.
+ */
+public final class Action {
     private int actionId;
 
     private String actionType;
@@ -30,9 +32,12 @@ public class Action {
 
     private int seasonNumber;
 
-    private List<List<String>> filters = new ArrayList<>();
+    private List<List<String>> filters;
 
-    public Action(ActionInputData action) {
+    /**
+     * Constructor specializat.
+     */
+    public Action(final ActionInputData action) {
         this.actionId = action.getActionId();
         this.actionType = action.getActionType();
         this.type = action.getType();
@@ -52,7 +57,7 @@ public class Action {
         return actionId;
     }
 
-    public void setActionId(int actionId) {
+    public void setActionId(final int actionId) {
         this.actionId = actionId;
     }
 
@@ -60,7 +65,7 @@ public class Action {
         return actionType;
     }
 
-    public void setActionType(String actionType) {
+    public void setActionType(final String actionType) {
         this.actionType = actionType;
     }
 
@@ -68,7 +73,7 @@ public class Action {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(final String type) {
         this.type = type;
     }
 
@@ -76,7 +81,7 @@ public class Action {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
@@ -84,7 +89,7 @@ public class Action {
         return objectType;
     }
 
-    public void setObjectType(String objectType) {
+    public void setObjectType(final String objectType) {
         this.objectType = objectType;
     }
 
@@ -92,7 +97,7 @@ public class Action {
         return sortType;
     }
 
-    public void setSortType(String sortType) {
+    public void setSortType(final String sortType) {
         this.sortType = sortType;
     }
 
@@ -100,7 +105,7 @@ public class Action {
         return criteria;
     }
 
-    public void setCriteria(String criteria) {
+    public void setCriteria(final String criteria) {
         this.criteria = criteria;
     }
 
@@ -108,7 +113,7 @@ public class Action {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -116,7 +121,7 @@ public class Action {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(final String genre) {
         this.genre = genre;
     }
 
@@ -124,7 +129,7 @@ public class Action {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(final int number) {
         this.number = number;
     }
 
@@ -132,7 +137,7 @@ public class Action {
         return grade;
     }
 
-    public void setGrade(double grade) {
+    public void setGrade(final double grade) {
         this.grade = grade;
     }
 
@@ -140,7 +145,7 @@ public class Action {
         return seasonNumber;
     }
 
-    public void setSeasonNumber(int seasonNumber) {
+    public void setSeasonNumber(final int seasonNumber) {
         this.seasonNumber = seasonNumber;
     }
 
@@ -148,26 +153,26 @@ public class Action {
         return filters;
     }
 
-    public void setFilters(List<List<String>> filters) {
+    public void setFilters(final List<List<String>> filters) {
         this.filters = filters;
     }
 
     @Override
     public String toString() {
-        return "Action{" +
-                "actionId=" + actionId +
-                ", actionType='" + actionType + '\'' +
-                ", type='" + type + '\'' +
-                ", username='" + username + '\'' +
-                ", objectType='" + objectType + '\'' +
-                ", sortType='" + sortType + '\'' +
-                ", criteria='" + criteria + '\'' +
-                ", title='" + title + '\'' +
-                ", genre='" + genre + '\'' +
-                ", number=" + number +
-                ", grade=" + grade +
-                ", seasonNumber=" + seasonNumber +
-                ", filters=" + filters +
-                '}';
+        return "Action{"
+                + "actionId=" + actionId
+                + ", actionType='" + actionType + '\''
+                + ", type='" + type + '\''
+                + ", username='" + username + '\''
+                + ", objectType='" + objectType + '\''
+                + ", sortType='" + sortType + '\''
+                + ", criteria='" + criteria + '\''
+                + ", title='" + title + '\''
+                + ", genre='" + genre + '\''
+                + ", number=" + number
+                + ", grade=" + grade
+                + ", seasonNumber=" + seasonNumber
+                + ", filters=" + filters
+                + '}';
     }
 }

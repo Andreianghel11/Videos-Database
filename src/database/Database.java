@@ -1,31 +1,41 @@
 package database;
 
-import actions.ActionExecutor;
 import entertainment.Genre;
-import fileio.*;
+import fileio.ActionInputData;
+import fileio.ActorInputData;
+import fileio.Input;
+import fileio.MovieInputData;
+import fileio.SerialInputData;
+import fileio.UserInputData;
 import utils.Utils;
 
-import javax.xml.crypto.Data;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
-public class Database {
-    /* Nume, actor. */
+/**
+ * Clasa definește obiectele de tipul Database. Un obiect database conține
+ * toate informațiile primite ca input. Actorii, utilizatorii, filmele și
+ * serialele sunt reținute sub formă de perechi nume - referință obiect în
+ * cadrul unor structuri de tip HashMap, iar acțiunile sunt reținute în
+ * cadrul unei structuri de tip ArrayList.
+ */
+public final class Database {
     private HashMap<String, Actor> actorsMap;
 
-    /* Nume, user. */
     private HashMap<String, User> usersMap;
 
-    /* Nume, film. */
     private HashMap<String, Movie> moviesMap;
 
-    /* Nume, serial. */
     private HashMap<String, Serial> serialsMap;
 
     private ArrayList<Action> actionsList;
 
-    /* Constructor special pentru input + alocare memorie.*/
-    public Database(Input input) {
+    /**
+     * Constructor specializat.
+     */
+    public Database(final Input input) {
         actorsMap = new HashMap<>();
         for (ActorInputData currentActor : input.getActors()) {
             Actor newActor = new Actor(currentActor);
@@ -64,7 +74,7 @@ public class Database {
         return actorsMap;
     }
 
-    public void setActorsMap(HashMap<String, Actor> actorsMap) {
+    public void setActorsMap(final HashMap<String, Actor> actorsMap) {
         this.actorsMap = actorsMap;
     }
 
@@ -72,7 +82,7 @@ public class Database {
         return usersMap;
     }
 
-    public void setUsersMap(HashMap<String, User> usersMap) {
+    public void setUsersMap(final HashMap<String, User> usersMap) {
         this.usersMap = usersMap;
     }
 
@@ -80,7 +90,7 @@ public class Database {
         return moviesMap;
     }
 
-    public void setMoviesMap(HashMap<String, Movie> moviesMap) {
+    public void setMoviesMap(final HashMap<String, Movie> moviesMap) {
         this.moviesMap = moviesMap;
     }
 
@@ -88,7 +98,7 @@ public class Database {
         return serialsMap;
     }
 
-    public void setSerialsMap(HashMap<String, Serial> serialsMap) {
+    public void setSerialsMap(final HashMap<String, Serial> serialsMap) {
         this.serialsMap = serialsMap;
     }
 
@@ -96,21 +106,29 @@ public class Database {
         return actionsList;
     }
 
-    public void setActionsList(ArrayList<Action> actionsList) {
+    public void setActionsList(final ArrayList<Action> actionsList) {
         this.actionsList = actionsList;
     }
 
-    public int calculateGenreViews(Genre genre) {
+    /**
+     * Calculează numărul de vizionări al unui gen primit ca parametru.
+     */
+    public int calculateGenreViews(final Genre genre) {
         int numberOfViews = 0;
         for (Movie currentMovie : this.getMoviesMap().values()) {
             for (String currentGenre : currentMovie.getGenres()) {
-                if (Utils.stringToGenre(currentGenre).equals(genre))
+                if (Utils.stringToGenre(currentGenre).equals(genre)) {
                     numberOfViews += currentMovie.getNrOfViews();
+                }
             }
         }
         return numberOfViews;
     }
 
+    /**
+     * Actualizeză baza de date și calculează numărul de adăugări
+     * în listele de favorite pentru fiecare show.
+     */
     public void calculateNumberOfFavoritesForEachShow() {
         List<Show> showList = createShowList();
         for (Show currentShow : showList) {
@@ -118,6 +136,10 @@ public class Database {
         }
     }
 
+    /**
+     * Actualizează baza de date și calculează numărul de
+     * vizualizări pentru fiecare show.
+     */
     public void calculateNumberOfViewsForEveryShow() {
         List<Show> showList = createShowList();
         for (Show currentShow : showList) {
@@ -125,12 +147,20 @@ public class Database {
         }
     }
 
+    /**
+     * Actualizează baza de date și calculează
+     * rating-ul fiecărui actor.
+     */
     public void calculateRatingForEveryActor() {
         for (Actor currentActor : this.getActorsMap().values()) {
             currentActor.calculateActorRating(this);
         }
     }
 
+    /**
+     * Returnează o listă de show-uri formată din
+     * lista de filme și cea de seriale a bazei de date.
+     */
     public List<Show> createShowList() {
         List<Show> showList = new ArrayList<>();
 

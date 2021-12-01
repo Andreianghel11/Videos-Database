@@ -6,25 +6,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/* Clasa User facuta de mine. */
-public class User {
+/**
+ * Clasa definește obiectele de tip utilizator.
+ */
+public final class User {
     private String username;
 
     private String subscriptionType;
 
-    /* Nume + nota. */
     private Map<String, Integer> history;
 
     private ArrayList<String> favoriteMovies;
 
-    /* Pt rating film. */
     private HashMap<String, Double> movieRatings;
 
-    /* Pt rating serial. -> nume serial, numar sezon, rating*/
     private Map<String, Map<Integer, Double>> serialRatings;
 
-    /* Constructor special. */
-    public User(UserInputData user) {
+    /**
+     * Constructor specializat.
+     */
+    public User(final UserInputData user) {
         this.username = user.getUsername();
         this.subscriptionType = user.getSubscriptionType();
         this.history = user.getHistory();
@@ -37,7 +38,7 @@ public class User {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
@@ -45,7 +46,7 @@ public class User {
         return subscriptionType;
     }
 
-    public void setSubscriptionType(String subscriptionType) {
+    public void setSubscriptionType(final String subscriptionType) {
         this.subscriptionType = subscriptionType;
     }
 
@@ -53,7 +54,7 @@ public class User {
         return history;
     }
 
-    public void setHistory(Map<String, Integer> history) {
+    public void setHistory(final Map<String, Integer> history) {
         this.history = history;
     }
 
@@ -61,7 +62,7 @@ public class User {
         return favoriteMovies;
     }
 
-    public void setFavoriteMovies(ArrayList<String> favoriteMovies) {
+    public void setFavoriteMovies(final ArrayList<String> favoriteMovies) {
         this.favoriteMovies = favoriteMovies;
     }
 
@@ -69,7 +70,7 @@ public class User {
         return movieRatings;
     }
 
-    public void setMovieRatings(HashMap<String, Double> movieRatings) {
+    public void setMovieRatings(final HashMap<String, Double> movieRatings) {
         this.movieRatings = movieRatings;
     }
 
@@ -77,10 +78,14 @@ public class User {
         return serialRatings;
     }
 
-    public void setSerialRatings(Map<String, Map<Integer, Double>> serialRatings) {
+    public void setSerialRatings(final Map<String, Map<Integer, Double>> serialRatings) {
         this.serialRatings = serialRatings;
     }
 
+    /**
+     * Metoda returnează numărul total de
+     * rating-uri acordate de către utilizator.
+     */
     public int numberOfRatings() {
         return movieRatings.size() + serialRatings.size();
     }

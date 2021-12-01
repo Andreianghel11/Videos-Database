@@ -1,20 +1,22 @@
 package database;
 
-import entertainment.Genre;
 import fileio.MovieInputData;
-import utils.Utils;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
-import java.util.List;
 
-/* Clasa Movie implementata de mine. */
-public class Movie extends Show{
+/**
+ * Clasa definește obiectele de tip film.
+ * Filmele sunt extensii ale clasei show.
+ */
+public final class Movie extends Show {
     private int duration;
 
     private ArrayList<Double> ratings;
 
-    public Movie(MovieInputData movie) {
+    /**
+     * Constructor specializat.
+     */
+    public Movie(final MovieInputData movie) {
         super(movie.getTitle(), movie.getYear(), movie.getCast(), movie.getGenres());
         this.duration = movie.getDuration();
         this.ratings = new ArrayList<>();
@@ -24,7 +26,7 @@ public class Movie extends Show{
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(final int duration) {
         this.duration = duration;
     }
 
@@ -32,7 +34,7 @@ public class Movie extends Show{
         return ratings;
     }
 
-    public void setRatings(ArrayList<Double> ratings) {
+    public void setRatings(final ArrayList<Double> ratings) {
         this.ratings = ratings;
     }
 

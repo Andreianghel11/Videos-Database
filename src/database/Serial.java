@@ -1,20 +1,23 @@
 package database;
 
-import entertainment.Genre;
 import entertainment.Season;
 import fileio.SerialInputData;
-import utils.Utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
-/* Clasa Serial implementata de mine. */
-public class Serial extends Show{
+/**
+ * Clasa definește obiectele de tip serial.
+ * Serialele sunt extensii ale clasei show.
+ */
+public final class Serial extends Show {
     private int numberOfSeasons;
 
     private ArrayList<Season> seasons;
 
-    public Serial(SerialInputData serial) {
+    /**
+     * Constructor specializat.
+     */
+    public Serial(final SerialInputData serial) {
         super(serial.getTitle(), serial.getYear(), serial.getCast(), serial.getGenres());
         this.seasons = serial.getSeasons();
     }
@@ -23,7 +26,7 @@ public class Serial extends Show{
         return numberOfSeasons;
     }
 
-    public void setNumberOfSeasons(int numberOfSeasons) {
+    public void setNumberOfSeasons(final int numberOfSeasons) {
         this.numberOfSeasons = numberOfSeasons;
     }
 
@@ -31,12 +34,13 @@ public class Serial extends Show{
         return seasons;
     }
 
-    public void setSeasons(ArrayList<Season> seasons) {
+    public void setSeasons(final ArrayList<Season> seasons) {
         this.seasons = seasons;
     }
 
-    /*Calculeaza rating-ul unui serial, tinand cont de toate notele acordate de catre useri sezoanelor.
-     Daca cel putin un sezon are rating, restul sezoanelor au nota 0.
+    /**
+     * Calculează rating-ul unui serial
+     * ținând cont de notele fiecărui sezon.
      */
     @Override
     public double calculateShowGrade() {
@@ -54,8 +58,11 @@ public class Serial extends Show{
         }
     }
 
-    /* Calculeaza rating-ul unui sezon, tinand cont de toate notele acordate de catre useri.*/
-    public double calculateSeasonGrade(Season season) {
+    /**
+     * Calculează rating-ul unui sezon
+     * ținând cont de toate rating-urile utilizatorilor.
+     */
+    public double calculateSeasonGrade(final Season season) {
         double rating = 0.0;
         if (season.getRatings().isEmpty()) {
             return 0.0;
@@ -66,6 +73,10 @@ public class Serial extends Show{
         return rating / season.getRatings().size();
     }
 
+    /**
+     * Calculează durata unui serial
+     * ținând cont de durata sezoanelor.
+     */
     public int calculateDuration() {
         int duration = 0;
         for (Season currentSeason : seasons) {

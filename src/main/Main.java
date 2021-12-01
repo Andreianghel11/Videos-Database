@@ -7,9 +7,10 @@ import common.Constants;
 import database.Action;
 import database.Database;
 import database.Output;
-import fileio.*;
+import fileio.Input;
+import fileio.InputLoader;
+import fileio.Writer;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
