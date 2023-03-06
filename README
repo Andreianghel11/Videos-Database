@@ -2,6 +2,11 @@ _Anghel Andrei - Stelian,
 322CA,
 Noiembrie 2021_
 
+INTRODUCERE:
+  Am simulat o baza de date ce retine informatii despre filme, seriale,
+actori si utilizatori si care poate raspunde la diferite tipuri de query-uri.
+Input-ul si output-ul se face prin obiecte de tip JSON.
+
 ## **Implementarea temei VideosDB**
 
 **Observație:** De fiecare dată când voi folosi la termenul **SHOW** mă
